@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView, FormView, CreateView, UpdateView, TemplateView
+from django.views.generic import ListView, FormView, CreateView, UpdateView
 
 from app.forms import PlaylistForm, ChannelUpdateForm, ChannelCreateForm
 from app.models import Channel, Playlist
@@ -92,7 +92,3 @@ class CreatePlaylist(FormView):
             )
 
         return super(CreatePlaylist, self).form_valid(form)
-
-
-class IndexView(TemplateView):
-    template_name = 'app/index.html'
