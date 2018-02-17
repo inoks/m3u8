@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-17 15:49+0000\n"
+"POT-Creation-Date: 2018-02-17 15:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,6 +34,14 @@ msgstr "Удалить существующие каналы"
 #: app/forms.py:52
 msgid "You should provide either file or url to your m3u8 playlist"
 msgstr "Нужно или выбрать файл или указать ссылку на плейлист"
+
+#: app/models.py:42
+msgid "Path to content"
+msgstr "Путь к контенту"
+
+#: app/models.py:43
+msgid "Hide from public playlist"
+msgstr "Скрыть плейлист"
 
 #: playlist/settings.py:154
 msgid "Russian"

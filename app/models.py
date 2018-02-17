@@ -1,8 +1,9 @@
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
-from django.conf import settings
+from django.utils.translation import gettext_lazy as _
 
 from app.utils import generate_random_key
 
@@ -38,8 +39,8 @@ class Channel(models.Model):
     title = models.CharField(max_length=255, default='')
     duration = models.CharField(default='0', max_length=255)
     group = models.CharField(max_length=255, null=True, blank=True)
-    path = models.CharField('path to content', max_length=1024)
-    hidden = models.BooleanField('hide from public playlist', default=False)
+    path = models.CharField(_('Path to content'), max_length=1024)
+    hidden = models.BooleanField(_('Hide from public playlist'), default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
 
