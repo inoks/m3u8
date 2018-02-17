@@ -41,7 +41,7 @@ msgstr "Путь к контенту"
 
 #: app/models.py:43
 msgid "Hide from public playlist"
-msgstr "Скрыть плейлист"
+msgstr "Не включать в публичный плейст"
 
 #: playlist/settings.py:154
 msgid "Russian"
