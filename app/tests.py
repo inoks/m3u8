@@ -1,16 +1,14 @@
 from django.test import TestCase
 from django.test import Client
-
-
-class AppTestCase(TestCase):
-    def test_true(self):
-        self.assertTrue(True)
+from django.contrib.auth.models import User
 
 
 class URLsTesting(TestCase):
 
     def setUp(self):
         self.donald_trump = Client(enforce_csrf_checks=True)
+        user = User.objects.create_superuser('Garry Kasparov', 'garry1@ronda.com', 'garry500')
+        self.donald_trump.force_login(user)
         self.ok = (200, 302)
 
     def test_urls(self):
@@ -24,7 +22,9 @@ class URLsTesting(TestCase):
                 '/accounts/logout/',
                 '/login/facebook/',
                 '/login/vk-oauth2/',
-                '/i18n/setlang/')
+                '/i18n/setlang/',
+                '',
+                )
 
         for url in urls:
             response = self.donald_trump.get(url)
