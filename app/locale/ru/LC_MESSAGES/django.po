@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-16 14:31+0300\n"
+"POT-Creation-Date: 2018-02-17 15:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,11 +19,27 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: playlist/settings.py:153
+#: app/forms.py:32
+msgid "Provide link to playlist"
+msgstr "Укажите ссылку на плейлист"
+
+#: app/forms.py:36
+msgid "Or choose playlist file"
+msgstr "Или выберите файл с плейлистом"
+
+#: app/forms.py:41
+msgid "Remove existed channels"
+msgstr "Удалить существующие каналы"
+
+#: app/forms.py:52
+msgid "You should provide either file or url to your m3u8 playlist"
+msgstr "Нужно или выбрать файл или указать ссылку на плейлист"
+
+#: playlist/settings.py:154
 msgid "Russian"
 msgstr "Русский"
 
-#: playlist/settings.py:154
+#: playlist/settings.py:155
 msgid "English"
 msgstr "Английский"
 
@@ -32,9 +47,9 @@ msgstr "Английский"
 msgid "M3U8 TV Channels Playlist Editor"
 msgstr "M3U8 TV Редактор плейлиста каналов"
 
-#: templates/_base.html:14
+#: templates/_base.html:14 templates/app/index.html:8
 msgid "Video Playlist Editor"
-msgstr "Редактор видео плейлиста"
+msgstr "Редактор видео плейлистов"
 
 #: templates/_base.html:17
 msgid "Channels list"
@@ -52,46 +67,64 @@ msgstr "Выйти"
 msgid "Sign Up/Sign In"
 msgstr "Войти/Зарегистрироваться"
 
-#: templates/app/add_playlist.html:3
+#: templates/app/add_playlist.html:5
 msgid "Load Playlist"
 msgstr "Загрузить плейлист"
 
-#: templates/app/channel_form.html:32
+#: templates/app/add_playlist.html:11
+msgid "Load"
+msgstr "Загрузить"
+
+#: templates/app/channel_form.html:36
 msgid "Save"
 msgstr "Сохранить"
 
-#: templates/app/channel_list.html:6
+#: templates/app/channel_list.html:8
 msgid "Public Playlist link"
 msgstr "Ссылка к публичному плейлисту"
 
-#: templates/app/channel_list.html:9
+#: templates/app/channel_list.html:11
 msgid "Search"
 msgstr "Поиск"
 
-#: templates/app/channel_list.html:12
+#: templates/app/channel_list.html:14
 msgid "Add new channel to playlist"
 msgstr "Добавить новый канал к плейлисту"
 
-#: templates/app/channel_list.html:14
+#: templates/app/channel_list.html:16
 msgid "Order by title"
 msgstr "Сортировать по названию"
 
-#: templates/app/index.html:4
+#: templates/app/index.html:10
 msgid "Here you can create or edit your m3u8 playlist and view channels online"
-msgstr "Здесь вы можете создать или изменить ваш m3u8 плейлист или посмотреть онлайн каналы"
+msgstr ""
+"Здесь вы можете создать или изменить ваш m3u8 плейлист или посмотреть онлайн "
+"каналы"
 
-#: templates/app/index.html:5
+#: templates/app/index.html:15
 msgid ""
-" You can also generate unique public link to your playlist,\n"
-"    which will be contains updated channels as they are\n"
-"    edited on our site. "
-msgstr "Вы так же можете сгенерировать публичную ссылку к вашему плейлисту"
-"       которая будет хранить обновлённые каналы по мере их добавления на нашем сайте"
+"You can also generate private link to your playlist for using with your "
+"video player or Smart TV."
+msgstr ""
+"Вы также можете получить ссылку для использования вашего плейлиста в медиа "
+"плеере или в Smart TV"
 
-#: templates/registration/login.html:3
+#: templates/app/index.html:19
+msgid "Create Playlist"
+msgstr "Создать плейлист"
+
+#: templates/registration/login.html:5
 msgid "Login"
 msgstr "Войти"
 
-#: templates/registration/login.html:7
+#: templates/registration/login.html:9
 msgid "Please login, using one of the following provider: "
 msgstr "Пожалуйста войдите с помощью социальной сети."
+
+#: templates/registration/login.html:12
+msgid "Facebook"
+msgstr "Facebook"
+
+#: templates/registration/login.html:13
+msgid "VK"
+msgstr "ВКонтакте"

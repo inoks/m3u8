@@ -1,5 +1,9 @@
 {% extends '_base.html' %}
+
+{% load i18n %}
+
 {% block title %}{{ object.title }}{% endblock %}
+
 {% block content %}
   {% if object.path %}
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>

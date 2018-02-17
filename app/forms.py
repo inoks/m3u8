@@ -1,5 +1,6 @@
 from django import forms
 from django.core.validators import FileExtensionValidator
+from django.utils.translation import gettext_lazy as _
 
 from app.models import Channel
 
@@ -28,16 +29,16 @@ class ChannelCreateForm(forms.ModelForm):
 
 class PlaylistForm(forms.Form):
     url = forms.URLField(
-        label='Provide link to playlist',
+        label=_('Provide link to playlist'),
         required=False
     )
     file = forms.FileField(
-        label='Or upload playlist file',
+        label=_('Or choose playlist file'),
         required=False,
         validators=[FileExtensionValidator(allowed_extensions=['m3u8', 'm3u'])]
     )
     remove_existed = forms.BooleanField(
-        label='Remove existed channels',
+        label=_('Remove existed channels'),
         initial=True,
         required=False
     )
@@ -48,6 +49,6 @@ class PlaylistForm(forms.Form):
         file = cleaned_data.get("file")
 
         if not url and not file:
-            raise forms.ValidationError("You should provide either file or url to your m3u8 playlist")
+            raise forms.ValidationError(_("You should provide either file or url to your m3u8 playlist"))
 
         return cleaned_data
