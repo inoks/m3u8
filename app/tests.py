@@ -15,9 +15,16 @@ class URLsTesting(TestCase):
 
     def test_urls(self):
 
-        urls = ('/', '/admin/', '/add/', '/channel/new/',
-                '/channels', '/accounts/login/',
-                '/accounts/logout/', )
+        urls = ('/',
+                '/admin/',
+                '/add/',
+                '/channel/new/',
+                '/channels',
+                '/accounts/login/',
+                '/accounts/logout/',
+                '/login/facebook/',
+                '/login/vk-oauth2/',
+                '/i18n/setlang/')
 
         for url in urls:
             response = self.donald_trump.get(url)
