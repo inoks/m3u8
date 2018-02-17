@@ -148,9 +148,3 @@ except ImportError:
         from playlist.production import *  # noqa
     except ImportError:
         pass
-
-
-LANGUAGES = [
-    ('ru', _('Russian')),
-    ('en', _('English')),
-]
