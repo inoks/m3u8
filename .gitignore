@@ -9,3 +9,6 @@ playlist/local.py
 playlist/production.py
 
 notes.txt
+
+#virtualenv
+venv/
