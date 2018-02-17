@@ -29,7 +29,7 @@
   <form method="POST">
     {% csrf_token %}
     {{ form.as_p }}
-    <button>Save</button>
+    <button>{% trans "Save" %}</button>
   </form>
 
 {% endblock %}

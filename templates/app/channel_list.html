@@ -1,17 +1,17 @@
 {% extends '_base.html' %}
 
 {% block title %}Channels list{% endblock %}
-
+{% load i18n %}
 {% block content %}
-  <a href="{{ public_link }}">Public Playlist link</a>
+  <a href="{{ public_link }}">{% trans "Public Playlist link" %}</a>
   <form>
     <input name="q" placeholder="Search channel by name" value="{{ request.GET.q }}">
-    <button>Search</button>
+    <button>{% trans "Search" %}</button>
   </form>
   <hr/>
-  <a href="{% url 'new-channel' %}">Add new channel to playlist</a>
+  <a href="{% url 'new-channel' %}">{% trans "Add new channel to playlist" %}</a>
   <hr/>
-  <a href="?order_by=title">Order by title</a>
+  <a href="?order_by=title">{% trans "Order by title" %}</a>
   <br/>
   <ul>
     {% for object in object_list %}

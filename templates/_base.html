@@ -1,30 +1,54 @@
 <!doctype html>
+{% load i18n %}
 <html lang="en">
 <head>
-  <title>{% block title %}M3U8 TV Channels Playlist Editor{% endblock %}</title>
+  <title>{% block title %}{% trans "M3U8 TV Channels Playlist Editor" %}{% endblock %}</title>
   <meta name="description"
         content="Free online m3u, m3u8 playlist editor and server. You can upload, edit and use direct link to your playlist on your Video player (like Kodi, XBMX and etc).">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css"
         integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+  <style>
+   .posit {
+       position: fixed;
+       top: 0;
+       right: 0;
+   }
+  </style>
 </head>
 <body>
+<div class="posit">
+<form action="{% url 'set_language' %}" method="post" >{% csrf_token %}
+    <input name="next" type="hidden" value="{{ redirect_to }}" />
+    <select name="language">
+        {% get_current_language as LANGUAGE_CODE %}
+        {% get_available_languages as LANGUAGES %}
+        {% get_language_info_list for LANGUAGES as languages %}
+        {% for language in languages %}
+            <option onclick="" value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+              {{ language.name_local }} ({{ language.code }})
+            </option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="go" />
+</form>
+</div>
 <div class="container">
   <header class="masthead">
-    <h3 class="text-muted">Video Playlist Editor</h3>
+    <h3 class="text-muted">{% trans "Video Playlist Editor" %}</h3>
     <ul class="nav">
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'channels' %}">Channels list</a>
+        <a class="nav-link" href="{% url 'channels' %}">{% trans "Channels list" %}</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'create-playlist' %}">Load m3u8 playlist from web or file</a>
+        <a class="nav-link" href="{% url 'create-playlist' %}">{% trans "Load m3u8 playlist from web or file" %}</a>
       </li>
       {% if request.user.is_authenticated %}
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+          <a class="nav-link" href="{% url 'logout' %}">{% trans "Logout" %}</a>
         </li>
       {% else %}
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'login' %}">Sign Up/Sign In</a>
+          <a class="nav-link" href="{% url 'login' %}">{% trans "Sign Up/Sign In" %}</a>
         </li>
       {% endif %}
     </ul>
