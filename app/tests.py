@@ -7,9 +7,7 @@ from app.models import Channel, Playlist
 
 
 class AppTestCase(TestCase):
-
     def setUp(self):
-        self.client = Client()
         self.username = 'John Doe'
         self.email = 'john@example.com'
         self.password = 'dolphins'
@@ -18,10 +16,13 @@ class AppTestCase(TestCase):
             email=self.email,
             password=self.password
         )
+        self.client = Client()
         self.client.login(
             username=self.username,
             password=self.password
         )
+
+        self.anonymous_client = Client()
 
         self.playlist = Playlist(user=self.user)
         self.playlist.save()
@@ -68,3 +69,11 @@ class AppTestCase(TestCase):
 
     def test_channel_link(self):
         self.assertIsNotNone(self.channel.get_absolute_url())
+
+    def test_channel_update(self):
+        response = self.client.get(self.channel.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+
+        response = self.anonymous_client.get(self.channel.get_absolute_url())
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('login', response.url, msg='Not redirected to login view')
