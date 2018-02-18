@@ -62,9 +62,6 @@ class ModelsTesting(TestCase):
         # self.assertTrue(self.playlist.get_absolute_url())  # Raises an error
 
         self.assertTrue(self.playlist.count)
-        self.assertIsInstance(str(self.playlist), str)
 
     def test_channel(self):
         self.assertTrue(self.channel.get_absolute_url())
-        self.assertIsInstance(str(self.channel), str)
-
