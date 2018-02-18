@@ -23,9 +23,6 @@ class Playlist(models.Model):
     def public_link(self):
         return settings.BASE_PATH + reverse('playlist-public', kwargs={'public_key': self.public_key})
 
-    def get_absolute_url(self):
-        return reverse('playlist', kwargs={'pk': self.pk})
-
     def __str__(self):
         return 'Playlist {}, user: {}'.format(self.pk, self.user)
 
