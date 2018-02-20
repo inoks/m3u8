@@ -36,7 +36,7 @@ class Channel(models.Model):
     title = models.CharField(max_length=255, default='')
     duration = models.CharField(default='0', max_length=255)
     group = models.CharField(max_length=255, null=True, blank=True)
-    path = models.CharField(_('Path to content'), max_length=1024)
+    path = models.TextField(_('Path to content'))
     hidden = models.BooleanField(_('Hide from public playlist'), default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
