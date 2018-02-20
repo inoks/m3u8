@@ -24,6 +24,11 @@ def deploy():
         put('playlist/production.py',
             os.path.join(BASE_PATH, 'playlist/production.py'))
 
+        # Update Nginx configuration
+        put('nginx.conf', '/etc/nginx/sites-enabled/m3u8.conf')
+        run('nginx -t')
+        run('nginx -s reload')
+
         with virtualenv():
             run('pip install -U -r requirements.txt')
             run('python ./manage.py makemigrations --merge')
