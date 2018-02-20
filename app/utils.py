@@ -31,7 +31,8 @@ def load_remote_m3u8(link, playlist, remove_existed=False):
 
     duration = title = group = path = None
     for line in r.iter_lines(decode_unicode=True):
-        line = line.decode("utf-8")
+        if isinstance(line, bytes):
+            line = line.decode("utf-8")
 
         if line == '#EXTM3U':
             continue
