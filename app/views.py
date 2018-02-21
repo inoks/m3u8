@@ -48,7 +48,10 @@ class ChannelUpdate(UpdateView):
 
 @method_decorator(login_required, name='dispatch')
 class ChannelList(ListView):
+
     model = Channel
+    paginate_by = 10
+    context_object_name = 'channels'
 
     def get_queryset(self):
         qs = super(ChannelList, self).get_queryset().filter(playlist__user=self.request.user)
