@@ -135,14 +135,9 @@ BASE_PATH = 'https://m3u8.ru'
 
 SOCIAL_AUTH_FACEBOOK_KEY = ''
 SOCIAL_AUTH_FACEBOOK_SECRET = ''
-SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
-SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
-    'locale': 'en_US',
-    'fields': 'id, name, email'
-}
+
 SOCIAL_AUTH_VK_OAUTH2_KEY = ''
 SOCIAL_AUTH_VK_OAUTH2_SECRET = ''
-SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email', ]
 
 try:
     from playlist.local import *  # noqa
