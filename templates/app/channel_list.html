@@ -16,14 +16,14 @@
   <a href="?order_by=title">{% trans "Order by title" %}</a>
   <br/>
 
-  <tbody>
-    {% for channel in channels %}
-      <li>
-        <a href="{{ channel.get_absolute_url }}">{{ channel.title }}</a>
-        (<a href="?group={{ channel.group }}">{{ channel.group }}</a>)
-        <a href="{{ channel.get_absolute_url }}">Edit/View</a>
-      </li>
-    {% endfor %}
-  </tbody>
-{% endblock %}
+{% for channel in object_list %}
+<li>
+  <a href="{{ channel.get_absolute_url }}">{{ channel.title }}</a>
+  (<a href="?group={{ channel.group }}">{{ channel.group }}</a>)
+  <a href="{{ channel.get_absolute_url }}">Edit/View</a>
+</li>
+{% endfor %}
+
 {% include "app/paginator.html" %}
+
+{% endblock %}
