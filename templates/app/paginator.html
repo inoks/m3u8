@@ -1,3 +1,5 @@
+{% load extras_tf %}
+
 {% if is_paginated %}
   <ul class="pagination">
     {% if page_obj.has_previous %}
@@ -13,7 +15,7 @@
       {% endif %}
     {% endfor %}
     {% if page_obj.has_next %}
-      <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+    <li><a href="?{% url_replace request 'page' paginator.next_page_number %}">&raquo;</a></li>
     {% else %}
       <li class="disabled"><span>&raquo;</span></li>
     {% endif %}
