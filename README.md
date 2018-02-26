@@ -1,4 +1,8 @@
-# m3u8
+# m3u8 
+
+[![Coverage Status](https://coveralls.io/repos/github/inoks/m3u8/badge.svg?branch=master)](https://coveralls.io/github/inoks/m3u8?branch=master)
+
+
 Code to run https://m3u8.ru
 
 ## Public Video Playlists
