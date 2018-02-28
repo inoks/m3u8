@@ -50,7 +50,7 @@ class ChannelUpdate(UpdateView):
 class ChannelList(ListView):
 
     model = Channel
-    paginate_by = 3
+    paginate_by = 10
 
     def get_queryset(self):
         qs = super(ChannelList, self).get_queryset().filter(playlist__user=self.request.user)
