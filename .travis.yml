@@ -15,9 +15,12 @@ install:
   - pip install -r requirements.txt
   - pip install flake8
   - pip install django==$DJANGO --quiet
+  - pip install coverage
+  - pip install coveralls
 
 before_script:
   - flake8 --ignore E501
 
 script:
-  - python ./manage.py test
+  - coverage run ./manage.py test
+  - coveralls
