@@ -31,17 +31,16 @@ def load_remote_m3u8(link, playlist, remove_existed=False):
     if remove_existed:
         playlist.channels.all().delete()
 
-    channels = m3u8.load(link)
+    all = m3u8.load(link)
 
-    if channels.segments:
-        for segment in channels.segments:
-            Channel.objects.create(
-                playlist=playlist,
-                title=segment.title if segment.title else None,
-                duration=segment.duration if segment.duration else None,
-                group=segment.group if hasattr(segment, 'group') else None,
-                path=segment.uri
-            )
+    if all.segments:
+        Channel.objects.bulk_create([Channel(
+            playlist=playlist,
+            title=segment.title if segment.title else None,
+            duration=segment.duration if segment.duration else None,
+            group=None,
+            path=segment.uri
+        ) for segment in all.segments])
 
 
 def load_m3u8_from_file(fo, playlist, remove_existed=False):
@@ -53,21 +52,19 @@ def load_m3u8_from_file(fo, playlist, remove_existed=False):
         file=fo
     )
 
-    # Rewind file to start again
     fo.file.seek(0)
     content = fo.read().decode('utf-8')
 
     if remove_existed:
         playlist.channels.all().delete()
 
-    channels = m3u8.loads(content)
+    all = m3u8.loads(content)
 
-    if channels.segments:
-        for segment in channels.segments:
-            Channel.objects.create(
-                playlist=playlist,
-                title=segment.title if segment.title else None,
-                duration=segment.duration if segment.duration else None,
-                group=segment.group if hasattr(segment, 'group') else None,
-                path=segment.uri
-            )
+    if all.segments:
+        Channel.objects.bulk_create([Channel(
+            playlist=playlist,
+            title=segment.title if segment.title else None,
+            duration=segment.duration if segment.duration else None,
+            group=None,
+            path=segment.uri
+        ) for segment in all.segments])
