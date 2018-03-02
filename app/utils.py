@@ -2,8 +2,6 @@ import logging
 import random
 import string
 
-import m3u8
-
 import requests
 from django.core.files.base import ContentFile
 
@@ -16,6 +14,7 @@ def generate_random_key(length=4):
 
 def load_remote_m3u8(link, playlist, remove_existed=False):
     from app.models import Channel, Upload
+    import m3u8
 
     r = requests.get(link)
     if not r.ok:
@@ -39,12 +38,13 @@ def load_remote_m3u8(link, playlist, remove_existed=False):
             title=segment.title if segment.title else None,
             duration=segment.duration if segment.duration else None,
             group=None,
-            path=segment.uri
+            path=segment.uri if segment.uri else None
         ) for segment in all.segments])
 
 
 def load_m3u8_from_file(fo, playlist, remove_existed=False):
     from app.models import Channel, Upload
+    import m3u8
 
     Upload.objects.create(
         user=playlist.user,
@@ -53,12 +53,11 @@ def load_m3u8_from_file(fo, playlist, remove_existed=False):
     )
 
     fo.file.seek(0)
-    content = fo.read().decode('utf-8')
 
     if remove_existed:
         playlist.channels.all().delete()
 
-    all = m3u8.loads(content)
+    all = m3u8.loads(fo.read().decode('utf-8'))
 
     if all.segments:
         Channel.objects.bulk_create([Channel(
@@ -66,5 +65,5 @@ def load_m3u8_from_file(fo, playlist, remove_existed=False):
             title=segment.title if segment.title else None,
             duration=segment.duration if segment.duration else None,
             group=None,
-            path=segment.uri
+            path=segment.uri if segment.uri else None
         ) for segment in all.segments])
