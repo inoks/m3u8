@@ -2,8 +2,10 @@ from django.contrib.auth.models import User
 from django.shortcuts import reverse
 from django.test import Client
 from django.test import TestCase
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 from app.models import Channel, Playlist
+from app import forms
 
 
 class AppTestCase(TestCase):
@@ -77,3 +79,37 @@ class AppTestCase(TestCase):
         response = self.anonymous_client.get(self.channel.get_absolute_url())
         self.assertEqual(response.status_code, 302)
         self.assertIn('login', response.url, msg='Not redirected to login view')
+
+
+class FormTestCase(TestCase):
+
+    def setUp(self):
+
+        self.channel_data = {
+
+            'title': 'Simple Title',
+            'path': 'forest',
+            'group': 'Second',
+            'hidden': True
+
+        }
+
+        self.playlist_data = {
+
+            'url': 'https://m3u8.ru/',
+            'file': SimpleUploadedFile('name', b'no'),
+            'remove_existed': True
+
+        }
+
+    def test_channel_create(self):
+        form = forms.ChannelCreateForm(self.channel_data)
+        self.assertTrue(form.is_valid())
+
+    def test_channel_update(self):
+        form = forms.ChannelUpdateForm(self.channel_data)
+        self.assertTrue(form.is_valid())
+
+    def test_playlist(self):
+        form = forms.PlaylistForm(self.playlist_data)
+        self.assertTrue(form.is_valid())
