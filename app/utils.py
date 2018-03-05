@@ -14,6 +14,7 @@ def generate_random_key(length=4):
 
 def load_remote_m3u8(link, playlist, remove_existed=False):
     from app.models import Channel, Upload
+    import m3u8
 
     r = requests.get(link)
     if not r.ok:
@@ -29,79 +30,40 @@ def load_remote_m3u8(link, playlist, remove_existed=False):
     if remove_existed:
         playlist.channels.all().delete()
 
-    duration = title = group = path = None
-    for line in r.iter_lines(decode_unicode=True):
-        if isinstance(line, bytes):
-            line = line.decode("utf-8")
+    all = m3u8.load(link)
 
-        if line == '#EXTM3U':
-            continue
-
-        if line.startswith('#EXTINF:'):
-            duration, title = line[8:].split(',')
-            continue
-
-        if line.startswith('#EXTGRP:'):
-            group = line[8:]
-            continue
-
-        if line.startswith('#'):
-            logger.warning('Unsupported line skipped: {}'.format(line))
-            continue
-
-        if line:
-            path = line
-
-            Channel.objects.create(
-                playlist=playlist,
-                title=title,
-                duration=duration,
-                group=group,
-                path=path
-            )
+    if all.segments:
+        Channel.objects.bulk_create([Channel(
+            playlist=playlist,
+            title=segment.title if segment.title else None,
+            duration=segment.duration if segment.duration else None,
+            group=None,
+            path=segment.uri if segment.uri else None
+        ) for segment in all.segments])
 
 
 def load_m3u8_from_file(fo, playlist, remove_existed=False):
     from app.models import Channel, Upload
+    import m3u8
 
     Upload.objects.create(
         user=playlist.user,
         info=fo.name,
         file=fo
     )
-    # Rewind file to start again
+
     fo.file.seek(0)
 
     if remove_existed:
         playlist.channels.all().delete()
 
-    duration = title = group = None
+    all = m3u8.loads(fo.read().decode('utf-8'))
 
-    for line in fo.read().splitlines():
-        line = line.decode("utf-8")
-
-        if line == '#EXTM3U':
-            continue
-
-        if line.startswith('#EXTINF:'):
-            duration, title = line[8:].split(',')
-            continue
-
-        if line.startswith('#EXTGRP:'):
-            group = line[8:]
-            continue
-
-        if line.startswith('#'):
-            logger.warning('Unsupported line skipped: {}'.format(line))
-            continue
-
-        if line:
-            path = line
-
-            Channel.objects.create(
-                playlist=playlist,
-                title=title,
-                duration=duration,
-                group=group,
-                path=path
-            )
+    if all.segments:
+        Channel.objects.bulk_create([Channel(
+            playlist=playlist,
+            title=segment.title or None,
+            duration=segment.duration or None,
+            group=None,
+            path=segment.uri or None
+        ) for segment in all.segments])
