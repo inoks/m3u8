@@ -62,8 +62,8 @@ def load_m3u8_from_file(fo, playlist, remove_existed=False):
     if all.segments:
         Channel.objects.bulk_create([Channel(
             playlist=playlist,
-            title=segment.title if segment.title else None,
-            duration=segment.duration if segment.duration else None,
+            title=segment.title or None,
+            duration=segment.duration or None,
             group=None,
-            path=segment.uri if segment.uri else None
+            path=segment.uri or None
         ) for segment in all.segments])
