@@ -90,36 +90,3 @@ class AppTestCase(TestCase):
         update_channel = self.client.post(reverse('channel', args=[1]), data={'path': 'https://archive.org/download/fluxustv/Fluxus_TV.mp4', 'title': 'Complicated',
                                                                               'group': 'changed'})
         self.assertEqual(update_channel.status_code, 302)
-
-
-class FormTestCase(TestCase):
-
-    def setUp(self):
-
-        self.channel_data = {
-
-            'title': 'Simple Title',
-            'path': 'forest',
-            'group': 'Second',
-            'hidden': True
-
-        }
-
-        self.playlist_data = {
-
-            'url': 'https://m3u8.ru/',
-            'remove_existed': True
-
-        }
-
-    def test_channel_create(self):
-        form = forms.ChannelCreateForm(self.channel_data)
-        self.assertTrue(form.is_valid())
-
-    def test_channel_update(self):
-        form = forms.ChannelUpdateForm(self.channel_data)
-        self.assertTrue(form.is_valid())
-
-    def test_playlist(self):
-        form = forms.PlaylistForm(self.playlist_data)
-        self.assertTrue(form.is_valid())
