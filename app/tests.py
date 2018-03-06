@@ -1,8 +1,6 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.shortcuts import reverse
-from django.test import Client
-from django.test import TestCase
-from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import TestCase, Client
 
 from app.models import Channel, Playlist
 from app import forms
@@ -13,7 +11,7 @@ class AppTestCase(TestCase):
         self.username = 'John Doe'
         self.email = 'john@example.com'
         self.password = 'dolphins'
-        self.user = User.objects.create_user(
+        self.user = get_user_model().objects.create_user(
             username=self.username,
             email=self.email,
             password=self.password
@@ -80,6 +78,19 @@ class AppTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertIn('login', response.url, msg='Not redirected to login view')
 
+    def test_form(self):
+
+        add_playlist = self.client.post(reverse('create-playlist'), data={'path': 'https://dailyiptvlist.com/dl/fr-m3uplaylist-2018-03-06.m3u'})
+        self.assertEqual(add_playlist.status_code, 200)
+
+        new_channel = self.client.post(reverse('new-channel'), data={'path': 'https://archive.org/download/fluxustv/Fluxus_TV.mp4', 'title': 'Simple',
+                                                                     'group': 'first'})
+        self.assertEqual(new_channel.status_code, 302)
+
+        update_channel = self.client.post(reverse('channel', args=[1]), data={'path': 'https://archive.org/download/fluxustv/Fluxus_TV.mp4', 'title': 'Complicated',
+                                                                              'group': 'changed'})
+        self.assertEqual(update_channel.status_code, 302)
+
 
 class FormTestCase(TestCase):
 
@@ -97,7 +108,6 @@ class FormTestCase(TestCase):
         self.playlist_data = {
 
             'url': 'https://m3u8.ru/',
-            'file': SimpleUploadedFile('name', b'no'),
             'remove_existed': True
 
         }

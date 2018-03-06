@@ -87,7 +87,8 @@ class CreatePlaylist(FormView):
             load_remote_m3u8(
                 form.cleaned_data['url'],
                 playlist,
-                remove_existed=form.cleaned_data['remove_existed'])
+                remove_existed=form.cleaned_data['remove_existed']
+            )
         elif form.cleaned_data['file']:
             load_m3u8_from_file(
                 form.cleaned_data['file'],
