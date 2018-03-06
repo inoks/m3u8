@@ -4,6 +4,7 @@ from django.test import Client
 from django.test import TestCase
 
 from app.models import Channel, Playlist
+from app.utils import M3U8Channel
 
 
 class AppTestCase(TestCase):
@@ -77,3 +78,28 @@ class AppTestCase(TestCase):
         response = self.anonymous_client.get(self.channel.get_absolute_url())
         self.assertEqual(response.status_code, 302)
         self.assertIn('login', response.url, msg='Not redirected to login view')
+
+
+class M3U8TestCase(TestCase):
+    def test_simple_extinf(self):
+        channel_string = 'EXTINF:-1,RTV 4 HD'
+        channel = M3U8Channel(channel_string)
+        self.assertEqual(channel.duration, '-1')
+        self.assertEqual(channel.title, 'RTV 4 HD')
+
+    def test_simple_extinf_without_title(self):
+        channel_string = 'EXTINF:25,'
+        channel = M3U8Channel(channel_string)
+        self.assertEqual(channel.duration, '25')
+        self.assertEqual(channel.title, '')
+
+    def test_complex_extinf(self):
+        channel_string = 'EXTINF:-1 tvg-id="" tvg-name="Cinema Pro ARB" tvg-logo="" group-title="Arab Countries",Cinema Pro ARB'
+        channel = M3U8Channel(channel_string)
+        self.assertEqual(channel.duration, '-1')
+        self.assertEqual(channel.title, 'Cinema Pro ARB')
+
+    def test_bad_extinf(self):
+        channel_string = 'EXTINF:Cool, but no duration'
+        channel = M3U8Channel(channel_string)
+        self.assertFalse(channel.is_valid)

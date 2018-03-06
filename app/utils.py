@@ -1,11 +1,26 @@
 import logging
 import random
+import re
 import string
 
 import requests
 from django.core.files.base import ContentFile
 
 logger = logging.getLogger(__name__)
+
+
+class M3U8Channel(object):
+    duration = None
+    title = None
+    is_valid = True
+
+    def __init__(self, extinf_string):
+        try:
+            self.duration = re.findall(r'EXTINF:(-?\d+)', extinf_string)[0]
+            self.title = extinf_string.split(',')[-1]
+        except IndexError as e:
+            logging.warning('Unable to parse EXTINF string: {}. Error: {} '.format(extinf_string, e))
+            self.is_valid = False
 
 
 def generate_random_key(length=4):
@@ -38,8 +53,11 @@ def load_remote_m3u8(link, playlist, remove_existed=False):
             continue
 
         if line.startswith('#EXTINF:'):
-            duration, title = line[8:].split(',')
-            continue
+            channel = M3U8Channel(line)
+            if channel.is_valid:
+                duration = channel.duration
+                title = channel.title
+                continue
 
         if line.startswith('#EXTGRP:'):
             group = line[8:]
@@ -84,8 +102,11 @@ def load_m3u8_from_file(fo, playlist, remove_existed=False):
             continue
 
         if line.startswith('#EXTINF:'):
-            duration, title = line[8:].split(',')
-            continue
+            channel = M3U8Channel(line)
+            if channel.is_valid:
+                duration = channel.duration
+                title = channel.title
+                continue
 
         if line.startswith('#EXTGRP:'):
             group = line[8:]
