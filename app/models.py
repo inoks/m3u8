@@ -46,7 +46,14 @@ class Channel(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('channel', kwargs={'pk': self.pk})
+        if self.is_secure:
+            return settings.BASE_PATH + reverse('channel', kwargs={'pk': self.pk})
+        else:
+            return settings.UNSECURE_BASE_PATH + reverse('channel', kwargs={'pk': self.pk})
+
+    @cached_property
+    def is_secure(self):
+        return self.path and self.path.startswith('https://')
 
 
 class Upload(models.Model):
