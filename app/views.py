@@ -2,7 +2,6 @@ import logging
 
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, FormView, CreateView, UpdateView, TemplateView
@@ -14,15 +13,22 @@ from app.utils import load_remote_m3u8, load_m3u8_from_file
 logger = logging.getLogger(__name__)
 
 
-def public_playlist(request, public_key):
-    playlist = get_object_or_404(Playlist, public_key=public_key)
+class PublicPlaylistView(TemplateView):
+    template_name = 'app/m3u8.txt'
+    content_type = 'application/x-mpegURL'
 
-    channels = playlist.channels.filter(hidden=False)
+    def get_context_data(self, **kwargs):
+        context = super(PublicPlaylistView, self).get_context_data(**kwargs)
+        context['channels'] = Channel.objects.filter(
+            playlist__public_key=kwargs.get('public_key'),
+            hidden=False
+        )
+        return context
 
-    response = render(request, 'app/m3u8.txt', {'channels': channels}, content_type='application/x-mpegURL')
-    response['Content-Disposition'] = 'attachment; filename="list.m3u8"'
-
-    return response
+    def dispatch(self, *args, **kwargs):
+        response = super(PublicPlaylistView, self).dispatch(*args, **kwargs)
+        response['Content-Disposition'] = 'attachment; filename="list.m3u8"'
+        return response
 
 
 @method_decorator(login_required, name='dispatch')
