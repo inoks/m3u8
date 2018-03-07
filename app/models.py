@@ -71,14 +71,15 @@ class Channel(models.Model):
                    'tvg-name="{tvg_name}" ' \
                    'tvg-logo="{tvg_logo}" ' \
                    'group-title="{group_title}",' \
-                   '{title}'.format(
-                duration=self.duration,
-                tvg_id=self.extra_data_dict.get('tvg-ID', ''),
-                tvg_name=self.extra_data_dict.get('tvg-name', ''),
-                tvg_logo=self.extra_data_dict.get('tvg-logo', ''),
-                group_title=self.extra_data_dict.get('group-title', ''),
-                title=self.title
-            )
+                   '{title}' \
+                .format(
+                    duration=self.duration,
+                    tvg_id=self.extra_data_dict.get('tvg-ID', ''),
+                    tvg_name=self.extra_data_dict.get('tvg-name', ''),
+                    tvg_logo=self.extra_data_dict.get('tvg-logo', ''),
+                    group_title=self.extra_data_dict.get('group-title', ''),
+                    title=self.title
+                )
         else:
             return '{},{}'.format(self.duration, self.title)
 
