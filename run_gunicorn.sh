@@ -2,6 +2,7 @@
 
 set -e
 
+export DJANGO_SETTINGS_MODULE=playlist.settings.production
 NAME="Playlist"
 SOCKFILE=/tmp/playlist.sock
 NUM_WORKERS=2
