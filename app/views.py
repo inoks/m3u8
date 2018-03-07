@@ -19,7 +19,7 @@ def public_playlist(request, public_key):
 
     channels = playlist.channels.filter(hidden=False)
 
-    response = render(request, 'app/m3u8.txt', {'channels': channels}, content_type='text/plain')
+    response = render(request, 'app/m3u8.txt', {'channels': channels}, content_type='application/x-mpegURL')
     response['Content-Disposition'] = 'attachment; filename="list.m3u8"'
 
     return response

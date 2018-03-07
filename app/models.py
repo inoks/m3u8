@@ -1,3 +1,5 @@
+import json
+
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
@@ -54,6 +56,31 @@ class Channel(models.Model):
     @cached_property
     def is_secure(self):
         return self.path and self.path.startswith('https://')
+
+    @cached_property
+    def extra_data_dict(self):
+        if self.extra_data:
+            return json.loads(self.extra_data)
+        else:
+            return {}
+
+    def extinf(self):
+        if self.extra_data:
+            return '{duration}, ' \
+                   'tvg-ID="{tvg_id}" ' \
+                   'tvg-name="{tvg_name}" ' \
+                   'tvg-logo="{tvg_logo}" ' \
+                   'group-title="{group_title}",' \
+                   '{title}'.format(
+                duration=self.duration,
+                tvg_id=self.extra_data_dict.get('tvg-ID', ''),
+                tvg_name=self.extra_data_dict.get('tvg-name', ''),
+                tvg_logo=self.extra_data_dict.get('tvg-logo', ''),
+                group_title=self.extra_data_dict.get('group-title', ''),
+                title=self.title
+            )
+        else:
+            return '{},{}'.format(self.duration, self.title)
 
 
 class Upload(models.Model):
