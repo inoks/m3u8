@@ -143,7 +143,4 @@ SOCIAL_AUTH_VK_OAUTH2_SECRET = ''
 try:
     from playlist.local import *  # noqa
 except ImportError:
-    try:
-        from playlist.production import *  # noqa
-    except ImportError:
-        pass
+    pass
