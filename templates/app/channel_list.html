@@ -5,7 +5,9 @@
 {% block title %}Channels list{% endblock %}
 
 {% block content %}
-  <a href="{{ public_link }}">{% trans "Public Playlist link" %}</a>
+  <p>
+    {% trans "Public Playlist link" %}: <a href="{{ public_link }}" target="_blank">{{ public_link }}</a>
+  </p>
   <form>
     <input name="q" placeholder="Search channel by name" value="{{ request.GET.q }}">
     <button>{% trans "Search" %}</button>
