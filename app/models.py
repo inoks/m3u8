@@ -23,7 +23,8 @@ class Playlist(models.Model):
 
     @cached_property
     def public_link(self):
-        return settings.BASE_PATH + reverse('playlist-public', kwargs={'public_key': self.public_key})
+        if self.public_key:
+            return settings.BASE_PATH + reverse('playlist-public', kwargs={'public_key': self.public_key})
 
     def __str__(self):
         return 'Playlist {}, user: {}'.format(self.pk, self.user)
