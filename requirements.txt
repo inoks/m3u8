@@ -1,4 +1,6 @@
 Django>=2.0,<2.1
+djangorestframework>=3.7,<3.8
+drf-nested-routers>=0.90,<0.91
 Fabric3>=1.12,<1.13
 gunicorn==19.7.1
 psycopg2>=2.7.3,<2.8
