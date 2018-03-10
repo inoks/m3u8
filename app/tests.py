@@ -1,9 +1,11 @@
+import requests_mock
+import requests
+
 from django.contrib.auth import get_user_model
 from django.shortcuts import reverse
 from django.test import TestCase, Client
 
 from app.models import Channel, Playlist
-from app import forms
 
 
 class AppTestCase(TestCase):
@@ -78,15 +80,22 @@ class AppTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertIn('login', response.url, msg='Not redirected to login view')
 
-    def test_form(self):
+    def test_form1(self):
+        default = 'mock://127.0.0.1:8000'
 
-        add_playlist = self.client.post(reverse('create-playlist'), data={'path': 'https://dailyiptvlist.com/dl/fr-m3uplaylist-2018-03-06.m3u'})
-        self.assertEqual(add_playlist.status_code, 200)
+        new_channel_url = default + reverse('new-channel')
+        create_playlist_url = default + reverse('create-playlist')
+        update_channel_url = default + reverse('channel', args=[1])
 
-        new_channel = self.client.post(reverse('new-channel'), data={'path': 'https://archive.org/download/fluxustv/Fluxus_TV.mp4', 'title': 'Simple',
-                                                                     'group': 'first'})
-        self.assertEqual(new_channel.status_code, 302)
+        adapter = requests_mock.Adapter()
 
-        update_channel = self.client.post(reverse('channel', args=[1]), data={'path': 'https://archive.org/download/fluxustv/Fluxus_TV.mp4', 'title': 'Complicated',
-                                                                              'group': 'changed'})
-        self.assertEqual(update_channel.status_code, 302)
+        adapter.register_uri('POST', new_channel_url, text='Ok')
+        adapter.register_uri('POST', create_playlist_url, text='Ok')
+        adapter.register_uri('POST', update_channel_url, text='Ok')
+
+        session = requests.session()
+        session.mount('mock', adapter)
+
+        for url in (new_channel_url, create_playlist_url, update_channel_url):
+            response = session.post(url)
+            self.assertEqual(response.content, b'Ok')
