@@ -12,6 +12,7 @@ from app.utils import generate_random_key
 
 class Playlist(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255, null=True, blank=True)
     public_key = models.CharField(max_length=8, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
