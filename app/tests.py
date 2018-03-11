@@ -10,16 +10,16 @@ from app.utils import M3U8Channel
 
 
 class AppTestCase(TestCase):
+
     def setUp(self):
-        self.username = 'John Doe'
-        self.email = 'john@example.com'
-        self.password = 'dolphins'
+        self.username, self.password, self.email = 'John Doe', 'dolphins', 'john@example.com'
+
         self.user = User.objects.create_user(
             username=self.username,
             email=self.email,
             password=self.password
         )
-        self.client = Client()
+
         self.client.login(
             username=self.username,
             password=self.password
@@ -83,6 +83,7 @@ class AppTestCase(TestCase):
 
 
 class M3U8TestCase(TestCase):
+
     def setUp(self):
         logging.disable(logging.CRITICAL)
 
