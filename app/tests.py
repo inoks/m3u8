@@ -10,6 +10,7 @@ from app.utils import M3U8Channel
 
 
 class AppTestCase(TestCase):
+    
     def setUp(self):
         self.username, self.password, self.email = 'John Doe', 'dolphins', 'john@example.com'
 
