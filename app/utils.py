@@ -5,7 +5,6 @@ import re
 import string
 
 import requests
-from django.core.files.base import ContentFile
 
 logger = logging.getLogger(__name__)
 
