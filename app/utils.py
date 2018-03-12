@@ -5,7 +5,6 @@ import re
 import string
 
 import requests
-from django.core.files.base import ContentFile
 
 logger = logging.getLogger(__name__)
 
@@ -43,18 +42,11 @@ def generate_random_key(length=4):
 
 
 def load_remote_m3u8(link, playlist, remove_existed=False):
-    from app.models import Channel, Upload
+    from app.models import Channel
 
     r = requests.get(link)
     if not r.ok:
         return
-
-    upload = Upload(
-        user=playlist.user,
-        info=link
-    )
-    upload.file.save('requests.m3u8', ContentFile(r.content))
-    upload.save()
 
     if remove_existed:
         playlist.channels.all().delete()
@@ -100,13 +92,8 @@ def load_remote_m3u8(link, playlist, remove_existed=False):
 
 
 def load_m3u8_from_file(fo, playlist, remove_existed=False):
-    from app.models import Channel, Upload
+    from app.models import Channel
 
-    Upload.objects.create(
-        user=playlist.user,
-        info=fo.name,
-        file=fo
-    )
     # Rewind file to start again
     fo.file.seek(0)
 

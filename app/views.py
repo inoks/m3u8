@@ -4,9 +4,9 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView, FormView, CreateView, UpdateView, TemplateView
+from django.views.generic import ListView, CreateView, UpdateView, TemplateView
 
-from app.forms import PlaylistForm, ChannelUpdateForm, ChannelCreateForm
+from app.forms import ChannelUpdateForm, ChannelCreateForm, SubmittedPlaylistForm
 from app.models import Channel, Playlist
 from app.utils import load_remote_m3u8, load_m3u8_from_file
 
@@ -37,7 +37,9 @@ class ChannelCreate(CreateView):
     form_class = ChannelCreateForm
 
     def form_valid(self, form):
-        playlist, created = Playlist.objects.get_or_create(user=self.request.user)
+        playlist = Playlist.objects.filter(user=self.request.user).first()
+        if not playlist:
+            playlist = Playlist.objects.create(user=self.request.user)
         form.instance.playlist = playlist
         return super(ChannelCreate, self).form_valid(form)
 
@@ -86,13 +88,19 @@ class ChannelList(ListView):
 
 
 @method_decorator(login_required, name='dispatch')
-class CreatePlaylist(FormView):
-    form_class = PlaylistForm
+class CreatePlaylist(CreateView):
+    form_class = SubmittedPlaylistForm
     template_name = 'app/add_playlist.html'
     success_url = reverse_lazy('channels')
 
     def form_valid(self, form):
-        playlist, created = Playlist.objects.get_or_create(user=self.request.user)
+        playlist = Playlist.objects.filter(user=self.request.user).first()
+        if not playlist:
+            playlist = Playlist.objects.create(user=self.request.user)
+
+        form.instance.playlist = playlist
+        form.instance.user = self.request.user
+
         if form.cleaned_data['url']:
             load_remote_m3u8(
                 form.cleaned_data['url'],

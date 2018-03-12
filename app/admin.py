@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
-from app.models import Channel, Playlist, Upload
+from app.models import Channel, Playlist, SubmittedPlaylist
 
 
 class ChannelAdmin(admin.ModelAdmin):
@@ -17,8 +17,8 @@ class PlaylistAdmin(admin.ModelAdmin):
     list_display = ['user', 'count', 'created_at']
 
 
-class UploadAdmin(admin.ModelAdmin):
-    list_display = ['info', 'user', 'created_at']
+class SubmittedPlaylistAdmin(admin.ModelAdmin):
+    list_display = ['user', 'url', 'created_at']
 
 
 class EnhancedUserAdmin(UserAdmin):
@@ -28,7 +28,7 @@ class EnhancedUserAdmin(UserAdmin):
 
 admin.site.register(Channel, ChannelAdmin)
 admin.site.register(Playlist, PlaylistAdmin)
-admin.site.register(Upload, UploadAdmin)
+admin.site.register(SubmittedPlaylist, SubmittedPlaylistAdmin)
 
 admin.site.unregister(User)
 admin.site.register(User, EnhancedUserAdmin)
