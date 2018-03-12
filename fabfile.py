@@ -31,7 +31,6 @@ def deploy():
 
         with virtualenv():
             run('pip install -U -r requirements.txt')
-            run('python ./manage.py makemigrations --merge')
             run('python ./manage.py migrate')
             run('python ./manage.py collectstatic --noinput')
             run('python ./manage.py clearsessions')

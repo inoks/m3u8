@@ -51,4 +51,7 @@ class PlaylistForm(forms.Form):
         if not url and not file:
             raise forms.ValidationError(_("You should provide either file or url to your m3u8 playlist"))
 
+        if url and file:
+            raise forms.ValidationError(_("You should provide either file or url to your m3u8 playlist, not both"))
+
         return cleaned_data

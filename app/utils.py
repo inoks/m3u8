@@ -10,7 +10,7 @@ from django.core.files.base import ContentFile
 logger = logging.getLogger(__name__)
 
 
-class M3U8Channel(object):
+class M3U8ChannelProxy(object):
     duration = None
     title = None
     extra_data = {}
@@ -69,7 +69,7 @@ def load_remote_m3u8(link, playlist, remove_existed=False):
             continue
 
         if line.startswith('#EXTINF:'):
-            channel = M3U8Channel(line)
+            channel = M3U8ChannelProxy(line)
             if not channel.is_valid:
                 logger.warning('Unable to load EXTINF, format is not recognized: {}'.format(line))
 
@@ -123,7 +123,7 @@ def load_m3u8_from_file(fo, playlist, remove_existed=False):
             continue
 
         if line.startswith('#EXTINF:'):
-            channel = M3U8Channel(line)
+            channel = M3U8ChannelProxy(line)
             if not channel.is_valid:
                 logger.error('Unable to load EXTINF, format is not recognized: {}'.format(line))
 
