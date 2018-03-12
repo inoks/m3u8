@@ -1,13 +1,14 @@
 import logging
 
 from django.contrib.auth.models import User
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.shortcuts import reverse
 from django.test import Client, RequestFactory
 from django.test import TestCase
 
 from app.models import Channel, Playlist
 from app.templatetags.extra_tags import url_replace
-from app.utils import M3U8Channel
+from app.utils import M3U8ChannelProxy, load_m3u8_from_file
 
 
 class AppTestCase(TestCase):
@@ -38,6 +39,16 @@ class AppTestCase(TestCase):
             group='The best group',
             path='no path'
         )
+
+        self.sample_m3u8 = '\n'.join([
+            '#EXTM3U',
+            '#EXTINF:0,BBC NEWS',
+            '#EXTGRP:News',
+            'http://example.com/bbc-news-tv.m3u8',
+            '#EXTINF:0,Fox NEWS',
+            '#EXTGRP:News',
+            'http://example.com/fox-news-tv.m3u8'
+        ])
 
     def test_urls(self):
         urls = [
@@ -82,6 +93,16 @@ class AppTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertIn('login', response.url, msg='Not redirected to login view')
 
+    def test_load_from_file(self):
+        m3u8_file = SimpleUploadedFile(
+            "playlist.m3u8",
+            str.encode(self.sample_m3u8),
+            content_type='application/x-mpegURL'
+        )
+        load_m3u8_from_file(m3u8_file, self.playlist, remove_existed=True)
+
+        self.assertEqual(self.playlist.count, 2)
+
 
 class M3U8TestCase(TestCase):
     def setUp(self):
@@ -89,13 +110,13 @@ class M3U8TestCase(TestCase):
 
     def test_simple_extinf(self):
         channel_string = 'EXTINF:-1,RTV 4 HD'
-        channel = M3U8Channel(channel_string)
+        channel = M3U8ChannelProxy(channel_string)
         self.assertEqual('-1', channel.duration)
         self.assertEqual('RTV 4 HD', channel.title)
 
     def test_simple_extinf_without_title(self):
         channel_string = 'EXTINF:25,'
-        channel = M3U8Channel(channel_string)
+        channel = M3U8ChannelProxy(channel_string)
         self.assertEqual('25', channel.duration)
         self.assertEqual('', channel.title)
 
@@ -105,7 +126,7 @@ class M3U8TestCase(TestCase):
                          'tvg-name="Cinema Pro ARB" ' \
                          'tvg-logo="http://m3u8.ru/logo.png" ' \
                          'group-title="Arab Countries",Cinema Pro ARB'
-        channel = M3U8Channel(channel_string)
+        channel = M3U8ChannelProxy(channel_string)
         self.assertEqual('-1', channel.duration,)
         self.assertEqual('Cinema Pro ARB', channel.title, )
         self.assertEqual('12', channel.extra_data['tvg-ID'])
@@ -115,7 +136,7 @@ class M3U8TestCase(TestCase):
 
     def test_bad_extinf(self):
         channel_string = 'EXTINF:Cool, but no duration'
-        channel = M3U8Channel(channel_string)
+        channel = M3U8ChannelProxy(channel_string)
         self.assertFalse(channel.is_valid)
 
 
