@@ -55,6 +55,7 @@ class ChannelUpdate(UpdateView):
 @method_decorator(login_required, name='dispatch')
 class ChannelList(ListView):
     model = Channel
+    paginate_by = 50
 
     def get_queryset(self):
         qs = super(ChannelList, self).get_queryset().filter(playlist__user=self.request.user)
@@ -75,7 +76,10 @@ class ChannelList(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
 
         context = super(ChannelList, self).get_context_data(**kwargs)
-        playlist, _ = Playlist.objects.get_or_create(user=self.request.user)
+        playlist = Playlist.objects.filter(user=self.request.user).first()
+        if not playlist:
+            playlist = Playlist.objects.create(user=self.request.user)
+
         context['public_link'] = playlist.public_link
 
         return context
