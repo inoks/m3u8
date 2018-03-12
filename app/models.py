@@ -2,6 +2,7 @@ import json
 
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -89,8 +90,12 @@ class Channel(models.Model):
             return '{},{}'.format(self.duration, self.title)
 
 
-class Upload(models.Model):
+class SubmittedPlaylist(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    info = models.CharField(max_length=1024, null=True, blank=True)
-    file = models.FileField(upload_to='uploads')
+    playlist = models.ForeignKey(Playlist, on_delete=models.CASCADE, related_name='uploads')
+
+    file = models.FileField(upload_to='playlists', null=True, blank=True, validators=[FileExtensionValidator(['m3u8', 'm3u'])])
+    url = models.URLField(null=True, blank=True)
+    remove_existed = models.BooleanField(default=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
