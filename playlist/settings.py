@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'rest_framework.authtoken',
     'social_django',
 
     'app.apps.AppConfig',
@@ -139,6 +140,12 @@ SOCIAL_AUTH_FACEBOOK_SECRET = ''
 
 SOCIAL_AUTH_VK_OAUTH2_KEY = ''
 SOCIAL_AUTH_VK_OAUTH2_SECRET = ''
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}
 
 try:
     from playlist.local import *  # noqa
