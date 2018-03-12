@@ -12,6 +12,7 @@ from app.utils import generate_random_key
 
 class Playlist(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255, null=True, blank=True)
     public_key = models.CharField(max_length=8, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -44,6 +45,9 @@ class Channel(models.Model):
     hidden = models.BooleanField(_('Hide from public playlist'), default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('title', )
 
     def __str__(self):
         return self.title
