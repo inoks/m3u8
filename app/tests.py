@@ -1,9 +1,12 @@
+import logging
+
 from django.contrib.auth.models import User
 from django.shortcuts import reverse
 from django.test import Client
 from django.test import TestCase
 
 from app.models import Channel, Playlist
+from app.utils import M3U8Channel
 
 
 class AppTestCase(TestCase):
@@ -77,3 +80,39 @@ class AppTestCase(TestCase):
         response = self.anonymous_client.get(self.channel.get_absolute_url())
         self.assertEqual(response.status_code, 302)
         self.assertIn('login', response.url, msg='Not redirected to login view')
+
+
+class M3U8TestCase(TestCase):
+    def setUp(self):
+        logging.disable(logging.CRITICAL)
+
+    def test_simple_extinf(self):
+        channel_string = 'EXTINF:-1,RTV 4 HD'
+        channel = M3U8Channel(channel_string)
+        self.assertEqual('-1', channel.duration)
+        self.assertEqual('RTV 4 HD', channel.title)
+
+    def test_simple_extinf_without_title(self):
+        channel_string = 'EXTINF:25,'
+        channel = M3U8Channel(channel_string)
+        self.assertEqual('25', channel.duration)
+        self.assertEqual('', channel.title)
+
+    def test_complex_extinf(self):
+        channel_string = 'EXTINF:-1 ' \
+                         'tvg-id="12" ' \
+                         'tvg-name="Cinema Pro ARB" ' \
+                         'tvg-logo="http://m3u8.ru/logo.png" ' \
+                         'group-title="Arab Countries",Cinema Pro ARB'
+        channel = M3U8Channel(channel_string)
+        self.assertEqual('-1', channel.duration,)
+        self.assertEqual('Cinema Pro ARB', channel.title, )
+        self.assertEqual('12', channel.extra_data['tvg-ID'])
+        self.assertEqual('Cinema Pro ARB', channel.extra_data['tvg-name'])
+        self.assertEqual('http://m3u8.ru/logo.png', channel.extra_data['tvg-logo'])
+        self.assertEqual('Arab Countries', channel.extra_data['group-title'])
+
+    def test_bad_extinf(self):
+        channel_string = 'EXTINF:Cool, but no duration'
+        channel = M3U8Channel(channel_string)
+        self.assertFalse(channel.is_valid)

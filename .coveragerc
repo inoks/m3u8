@@ -1,0 +1,12 @@
+[run]
+source=
+    app/
+    playlist/
+
+[report]
+omit =
+    */migrations/*
+    playlist/settings.py
+    app/tests.py
+    */__init__.py
+    playlist/wsgi.py

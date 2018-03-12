@@ -12,4 +12,8 @@ notes.txt
 
 #virtualenv
 venv/
+
 media/uploads
+
+#coverage
+.coverage
