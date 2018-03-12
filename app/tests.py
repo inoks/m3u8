@@ -2,10 +2,11 @@ import logging
 
 from django.contrib.auth.models import User
 from django.shortcuts import reverse
-from django.test import Client
+from django.test import Client, RequestFactory
 from django.test import TestCase
 
 from app.models import Channel, Playlist
+from app.templatetags.extra_tags import url_replace
 from app.utils import M3U8Channel
 
 
@@ -116,3 +117,19 @@ class M3U8TestCase(TestCase):
         channel_string = 'EXTINF:Cool, but no duration'
         channel = M3U8Channel(channel_string)
         self.assertFalse(channel.is_valid)
+
+
+class TemplateTagsTestCase(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+
+    def test_url_replace(self):
+        request = self.factory.get('/list/?q=HD&page=2')
+        res_url = url_replace(request, 'page', 3)
+
+        self.assertEqual('q=HD&page=3', res_url)
+
+        request = self.factory.get('/list')
+        res_url = url_replace(request, 'page', 3)
+
+        self.assertEqual('page=3', res_url)
