@@ -24,8 +24,8 @@ class Playlist(models.Model):
 
     @cached_property
     def public_link(self):
-        if self.public_key:
-            return settings.BASE_PATH + reverse('playlist-public', kwargs={'public_key': self.public_key})
+        return settings.BASE_PATH + reverse('playlist-public',
+                                            kwargs={'public_key': self.public_key}) if self.public_key else None
 
     def __str__(self):
         return 'Playlist {}, user: {}'.format(self.pk, self.user)
@@ -41,7 +41,7 @@ class Channel(models.Model):
     duration = models.CharField(default='0', max_length=255)
     group = models.CharField(max_length=255, null=True, blank=True)
     extra_data = models.TextField(null=True, blank=True)
-    path = models.TextField(_('Path to content'))
+    path = models.URLField(_('Path to content'))
     hidden = models.BooleanField(_('Hide from public playlist'), default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -50,10 +50,8 @@ class Channel(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        if self.is_secure:
-            return settings.BASE_PATH + reverse('channel', kwargs={'pk': self.pk})
-        else:
-            return settings.UNSECURE_BASE_PATH + reverse('channel', kwargs={'pk': self.pk})
+        return settings.BASE_PATH + reverse('channel', kwargs={'pk': self.pk}) \
+            if self.is_secure else settings.UNSECURE_BASE_PATH + reverse('channel', kwargs={'pk': self.pk})
 
     @cached_property
     def is_secure(self):
@@ -61,10 +59,7 @@ class Channel(models.Model):
 
     @cached_property
     def extra_data_dict(self):
-        if self.extra_data:
-            return json.loads(self.extra_data)
-        else:
-            return {}
+        return json.loads(self.extra_data) if self.extra_data else dict()
 
     def extinf(self):
         if self.extra_data:

@@ -48,8 +48,7 @@ class ChannelUpdate(UpdateView):
     form_class = ChannelUpdateForm
 
     def get_queryset(self):
-        qs = super(ChannelUpdate, self).get_queryset().filter(playlist__user=self.request.user)
-        return qs
+        return super(ChannelUpdate, self).get_queryset().filter(playlist__user=self.request.user)
 
 
 @method_decorator(login_required, name='dispatch')
