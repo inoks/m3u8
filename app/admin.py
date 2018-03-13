@@ -22,7 +22,8 @@ class SubmittedPlaylistAdmin(admin.ModelAdmin):
 
 
 class EnhancedUserAdmin(UserAdmin):
-    list_display = UserAdmin.list_display + ('date_joined', )
+    list_display = UserAdmin.list_display + ('date_joined', 'last_login')
+    list_filter = UserAdmin.list_filter + ('date_joined', 'last_login')
     ordering = ('-date_joined', )
 
 

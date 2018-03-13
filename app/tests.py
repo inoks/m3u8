@@ -1,5 +1,6 @@
 import logging
 
+import requests_mock
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.shortcuts import reverse
@@ -8,10 +9,16 @@ from django.test import TestCase
 
 from app.models import Channel, Playlist
 from app.templatetags.extra_tags import url_replace
-from app.utils import M3U8ChannelProxy, load_m3u8_from_file
+from app.utils import M3U8ChannelProxy, load_m3u8_from_file, load_remote_m3u8
 
 
 class AppTestCase(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super(AppTestCase, cls).setUpClass()
+
+        logging.disable(logging.CRITICAL)
+
     def setUp(self):
         self.username = 'John Doe'
         self.email = 'john@example.com'
@@ -47,7 +54,9 @@ class AppTestCase(TestCase):
             'http://example.com/bbc-news-tv.m3u8',
             '#EXTINF:0,Fox NEWS',
             '#EXTGRP:News',
-            'http://example.com/fox-news-tv.m3u8'
+            'http://example.com/fox-news-tv.m3u8',
+            '#EXTINF:Invalid channel',
+            'http://example.com/invalid-channel.m3u8'
         ])
 
     def test_urls(self):
@@ -103,10 +112,15 @@ class AppTestCase(TestCase):
 
         self.assertEqual(self.playlist.count, 2)
 
+    @requests_mock.mock()
+    def test_load_remote_m3u8(self, m):
 
-class M3U8TestCase(TestCase):
-    def setUp(self):
-        logging.disable(logging.CRITICAL)
+        mocked_path = 'http://example.com/playlist.m3u8'
+        m.get(mocked_path, text=self.sample_m3u8)
+
+        load_remote_m3u8(mocked_path, self.playlist, remove_existed=True)
+
+        self.assertEqual(self.playlist.count, 2)
 
     def test_simple_extinf(self):
         channel_string = 'EXTINF:-1,RTV 4 HD'
@@ -139,18 +153,15 @@ class M3U8TestCase(TestCase):
         channel = M3U8ChannelProxy(channel_string)
         self.assertFalse(channel.is_valid)
 
+    def test_url_replace_tags(self):
 
-class TemplateTagsTestCase(TestCase):
-    def setUp(self):
-        self.factory = RequestFactory()
-
-    def test_url_replace(self):
-        request = self.factory.get('/list/?q=HD&page=2')
+        factory = RequestFactory()
+        request = factory.get('/list/?q=HD&page=2')
         res_url = url_replace(request, 'page', 3)
 
         self.assertEqual('q=HD&page=3', res_url)
 
-        request = self.factory.get('/list')
+        request = factory.get('/list')
         res_url = url_replace(request, 'page', 3)
 
         self.assertEqual('page=3', res_url)
