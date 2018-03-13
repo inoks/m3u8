@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from app.models import Playlist, Channel
+from app.models import Playlist, Channel, SubmittedPlaylist
 
 
 class PlaylistSerializer(serializers.ModelSerializer):
@@ -24,4 +24,14 @@ class ChannelSerializer(serializers.ModelSerializer):
             'group',
             'path',
             'hidden'
+        )
+
+
+class SubmittedPlaylistSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubmittedPlaylist
+        fields = (
+            'url',
+            'file',
+            'remove_existed'
         )
