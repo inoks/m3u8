@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView, TemplateView
 
-from app.forms import ChannelUpdateForm, ChannelCreateForm, SubmittedPlaylistForm
+from app.forms import ChannelCreateUpdateForm, SubmittedPlaylistForm
 from app.models import Channel, Playlist
 from app.utils import load_remote_m3u8, load_m3u8_from_file
 
@@ -34,7 +34,7 @@ class PublicPlaylistView(TemplateView):
 @method_decorator(login_required, name='dispatch')
 class ChannelCreate(CreateView):
     model = Channel
-    form_class = ChannelCreateForm
+    form_class = ChannelCreateUpdateForm
 
     def form_valid(self, form):
         playlist = Playlist.objects.filter(user=self.request.user).first()
@@ -47,7 +47,7 @@ class ChannelCreate(CreateView):
 @method_decorator(login_required, name='dispatch')
 class ChannelUpdate(UpdateView):
     model = Channel
-    form_class = ChannelUpdateForm
+    form_class = ChannelCreateUpdateForm
 
     def get_queryset(self):
         qs = super(ChannelUpdate, self).get_queryset().filter(playlist__user=self.request.user)

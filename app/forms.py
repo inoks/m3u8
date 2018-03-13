@@ -4,26 +4,31 @@ from django.utils.translation import gettext_lazy as _
 from app.models import Channel, SubmittedPlaylist
 
 
-class ChannelUpdateForm(forms.ModelForm):
+class ChannelCreateUpdateForm(forms.ModelForm):
     class Meta:
+
         model = Channel
+
         fields = [
             'title',
             'group',
             'path',
-            'hidden',
+            'extra_data',
+            'duration',
+            'hidden'
         ]
 
+        widgets = {
+            'path': forms.Textarea({'cols': 50, 'rows': 1}),
+            'extra_data': forms.Textarea({'cols': 50, 'rows': 5})
+        }
 
-class ChannelCreateForm(forms.ModelForm):
-    class Meta:
-        model = Channel
-        fields = [
-            'title',
-            'path',
-            'group',
-            'hidden',
-        ]
+        # labels = {
+        #     'title': _('Title'),
+        #     'group': _('Group'),
+        #     'path': _('Path'),
+        #
+        # }
 
 
 class SubmittedPlaylistForm(forms.ModelForm):
