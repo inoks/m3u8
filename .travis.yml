@@ -1,13 +1,13 @@
 language: python
 
 python:
-  - 3.4
-  - 3.5
-  - 3.6
-  - 3.7
+  - "3.4"
+  - "3.5"
+  - "3.6"
+  - "3.7-dev"
 
 env:
-  - DJANGO=2.0.3
+  - DJANGO="2.0.3"
 
 before_install:
   - export DJANGO_SETTINGS_MODULE=playlist.settings
