@@ -1,8 +1,6 @@
 import json
 import logging
-import random
 import re
-import string
 
 import requests
 
@@ -37,16 +35,12 @@ class M3U8ChannelProxy(object):
                 self.extra_data[attr] = attr_values[0]
 
 
-def generate_random_key(length=4):
-    return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(length))
-
-
 def load_remote_m3u8(link, playlist, remove_existed=False):
     from app.models import Channel
 
     r = requests.get(link)
     if not r.ok:
-        return
+        return False
 
     if remove_existed:
         playlist.channels.all().delete()
@@ -55,7 +49,7 @@ def load_remote_m3u8(link, playlist, remove_existed=False):
     group = None
     for line in r.iter_lines(decode_unicode=True):
         if isinstance(line, bytes):
-            line = line.decode("utf-8")
+            line = line.decode()
 
         if line == '#EXTM3U':
             continue
@@ -93,9 +87,6 @@ def load_remote_m3u8(link, playlist, remove_existed=False):
 
 def load_m3u8_from_file(fo, playlist, remove_existed=False):
     from app.models import Channel
-
-    # Rewind file to start again
-    fo.file.seek(0)
 
     if remove_existed:
         playlist.channels.all().delete()
@@ -136,3 +127,5 @@ def load_m3u8_from_file(fo, playlist, remove_existed=False):
                 path=path
             )
             channel = None
+
+    return True

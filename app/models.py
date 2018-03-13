@@ -1,14 +1,14 @@
 import json
+import string
 
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.urls import reverse
+from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
-
-from app.utils import generate_random_key
 
 
 class Playlist(models.Model):
@@ -19,7 +19,7 @@ class Playlist(models.Model):
 
     def save(self, **kwargs):
         if not self.public_key:
-            self.public_key = generate_random_key()
+            self.public_key = get_random_string(length=6, allowed_chars=string.ascii_letters)
 
         super(Playlist, self).save(**kwargs)
 
