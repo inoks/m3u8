@@ -4,12 +4,6 @@
 
 {% block title %}{{ object.title }}{% endblock %}
 
-<style>
-label textarea{
- vertical-align: middle;
-}
-</style>
-
 {% block content %}
   {% if object.path %}
     <div class="container" align="center">
@@ -37,16 +31,16 @@ label textarea{
     </script>
     <hr/>
   {% endif %}
-    </div>
+  </div>
   <div class="container">
-  <form method="POST"> {% csrf_token %}
+    <form method="POST"> {% csrf_token %}
 
-    {% for field in form %}
-      {{field.label}}: <br> {{ field }}
-      <hr/>
-    {% endfor %}
+      {% for field in form %}
+        {{field.label}}: <br> {{ field }}
+        <hr/>
+      {% endfor %}
 
-    <button >{% trans "Save" %}</button>
-  </form>
+      <button >{% trans "Save" %}</button>
+    </form>
   </div>
 {% endblock %}
