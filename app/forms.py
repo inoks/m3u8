@@ -23,13 +23,6 @@ class ChannelCreateUpdateForm(forms.ModelForm):
             'extra_data': forms.Textarea({'cols': 50, 'rows': 5})
         }
 
-        # labels = {
-        #     'title': _('Title'),
-        #     'group': _('Group'),
-        #     'path': _('Path'),
-        #
-        # }
-
 
 class SubmittedPlaylistForm(forms.ModelForm):
     class Meta:
