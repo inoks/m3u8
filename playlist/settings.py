@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
-    'rest_framework.authtoken',
     'social_django',
 
     'app.apps.AppConfig',
@@ -61,7 +60,6 @@ MIDDLEWARE = [
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.facebook.FacebookOAuth2',
     'social_core.backends.vk.VKOAuth2',
-
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -143,7 +141,7 @@ SOCIAL_AUTH_VK_OAUTH2_SECRET = ''
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     )
 }
 
