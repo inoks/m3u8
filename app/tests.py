@@ -3,6 +3,7 @@ import logging
 import requests_mock
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.http import QueryDict
 from django.shortcuts import reverse
 from django.test import Client, RequestFactory
 from django.test import TestCase
@@ -157,9 +158,9 @@ class AppTestCase(TestCase):
 
         factory = RequestFactory()
         request = factory.get('/list/?q=HD&page=2')
-        res_url = url_replace(request, 'page', 3)
+        res_url_query = QueryDict(url_replace(request, 'page', 3))
 
-        self.assertEqual('q=HD&page=3', res_url)
+        self.assertEqual({'q': 'HD', 'page': '3'}, res_url_query.dict())
 
         request = factory.get('/list')
         res_url = url_replace(request, 'page', 3)
