@@ -6,20 +6,21 @@ from app.models import Channel, SubmittedPlaylist
 
 class MultiWidgetBasic(forms.widgets.MultiWidget):
     def __init__(self, attrs=None):
-        widgets = [forms.TextInput(),
-                   forms.TextInput()]
-        super(MultiWidgetBasic, self).__init__(widgets, attrs)
+        super(MultiWidgetBasic, self).__init__([forms.TextInput()], attrs)
 
     def decompress(self, value):
-        if value:
-            import json
+        if not value:
+            return ''
 
-            dictor = json.loads(value)
-            keys = list(dictor.keys())
+        import json
 
-            return dictor[keys[0]], dictor[keys[1]]
-        else:
-            return '', ''
+        data = json.loads(value)
+        json_values = list(data.keys())  # ALL JSON VALUES
+        count = len(json_values)
+
+        self.widgets = [forms.TextInput(attrs={'name': 'NONNY'}) for _ in data]
+
+        return [data[json_values[n]] for n in range(count)]
 
 
 class ChannelCreateUpdateForm(forms.ModelForm):
