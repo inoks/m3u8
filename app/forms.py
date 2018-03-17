@@ -18,7 +18,7 @@ class MultiWidgetBasic(forms.widgets.MultiWidget):
         json_values = list(data.keys())  # ALL JSON VALUES
         count = len(json_values)
 
-        self.widgets = [forms.TextInput(attrs={'name': 'NONNY'}) for _ in data]
+        self.widgets = [forms.TextInput(attrs={'placeholder': str(key)}) for key in data]
 
         return [data[json_values[n]] for n in range(count)]
 
