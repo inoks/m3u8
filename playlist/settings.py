@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'PUT_SECRET_KEY_HERE'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['m3u8.ru', ]
 
@@ -143,3 +143,8 @@ try:
     from playlist.local import *  # noqa
 except ImportError:
     pass
+
+if DEBUG:
+
+    UNSECURE_BASE_PATH = BASE_PATH = 'http://127.0.0.1:8000'
+    ALLOWED_HOSTS = []
