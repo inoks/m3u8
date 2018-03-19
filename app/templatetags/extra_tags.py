@@ -24,11 +24,11 @@ def elipsis_or_number(paginator, current_page, request):
     if current_page == choosen_page:
         return choosen_page
 
-    if current_page == paginator.num_pages or current_page == paginator.num_pages - 1 or current_page == 1 or current_page == 2:
+    if current_page in (paginator.num_pages, paginator.num_pages - 1, 1, 2):
         return current_page
 
-    if choosen_page + 3 == current_page or choosen_page - 3 == current_page:
+    if current_page in (choosen_page + 3, choosen_page - 3):
         return '...'
 
-    if choosen_page + 1 == current_page or choosen_page + 2 == current_page or choosen_page - 1 == current_page or choosen_page - 2 == current_page:
-       return current_page
+    if current_page in (choosen_page + 1, choosen_page + 2, choosen_page - 1, choosen_page - 2):
+        return current_page
