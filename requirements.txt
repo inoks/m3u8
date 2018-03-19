@@ -6,4 +6,5 @@ gunicorn==19.7.1
 psycopg2-binary>=2.7.3,<2.8
 raven==6.6.0
 requests>=2,<3
+requests-mock>=1.4.0
 social-auth-app-django>=2.1,<2.2

@@ -20,7 +20,7 @@
     {% else %}
 
     {% for page_num in paginator.page_range %}
-        {% elipsis_or_number paginator page_num request as answer %}
+        {% ellipsis_or_number paginator page_num request as answer %}
         {% if answer != None %}
           <li class="page-item {% if page_obj.number == page_num %}active{% endif %}">
             <a class="page-link active" href="?{% url_replace request 'page' page_num %}">{{ answer }}</a>

@@ -7,9 +7,11 @@ from django.http import QueryDict
 from django.shortcuts import reverse
 from django.test import Client, RequestFactory
 from django.test import TestCase
+from django.core.paginator import Paginator
+from django.http.request import HttpRequest
 
 from app.models import Channel, Playlist
-from app.templatetags.extra_tags import url_replace
+from app.templatetags.extra_tags import url_replace, ellipsis_or_number
 from app.utils import M3U8ChannelProxy, load_m3u8_from_file, load_remote_m3u8
 
 
@@ -166,3 +168,28 @@ class AppTestCase(TestCase):
         res_url = url_replace(request, 'page', 3)
 
         self.assertEqual('page=3', res_url)
+
+    def test_ellipsis_or_number(self):
+        paginator = Paginator([x for x in range(1000)], 50)
+        page_count = paginator.num_pages
+
+        request = HttpRequest()
+
+        request.GET['page'] = 1
+        chosen_page = request.GET['page']
+
+        for page in range(1, page_count):
+            for current_page in range(page_count):
+                if current_page == chosen_page:
+                    self.assertEqual(ellipsis_or_number(paginator, current_page, request), chosen_page)
+                    continue
+                if current_page in (chosen_page + 3, chosen_page - 3):
+                    self.assertEqual(ellipsis_or_number(paginator, current_page, request), '...')
+                    continue
+
+                if current_page in (chosen_page + 1, chosen_page + 2, chosen_page - 1,
+                                    chosen_page - 2, paginator.num_pages, paginator.num_pages - 1, 1, 2):
+                    self.assertEqual(ellipsis_or_number(paginator, current_page, request), current_page)
+                    continue
+            request.GET['page'] += 1
+            chosen_page = request.GET['page']
