@@ -149,3 +149,7 @@ try:
     from playlist.local import *  # noqa
 except ImportError:
     pass
+
+if DEBUG:
+    ALLOWED_HOSTS = []
+    UNSECURE_BASE_PATH = BASE_PATH = 'http://127.0.0.1:8000'
