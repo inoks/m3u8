@@ -169,8 +169,8 @@ class AppTestCase(TestCase):
 
         self.assertEqual('page=3', res_url)
 
-    def test_ellipsis_or_numb(self):
-        paginator = Paginator([item for item in range(110)], 11)
+    def test_ellipsis_or_number(self):
+        paginator = Paginator([item for item in range(110)], 10)
         request = HttpRequest()
 
         request.GET['page'] = 5
