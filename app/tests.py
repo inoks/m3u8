@@ -169,27 +169,30 @@ class AppTestCase(TestCase):
 
         self.assertEqual('page=3', res_url)
 
-    def test_ellipsis_or_number(self):
-        paginator = Paginator([x for x in range(1000)], 50)
-        page_count = paginator.num_pages
-
+    def test_ellipsis_or_numb(self):
+        paginator = Paginator([item for item in range(110)], 11)
         request = HttpRequest()
 
+        request.GET['page'] = 5
+
+        self.assertEqual(ellipsis_or_number(paginator, 4, request), 4)
+        self.assertEqual(ellipsis_or_number(paginator, 8, request), '...')
+        self.assertEqual(ellipsis_or_number(paginator, 10, request), 10)
+
         request.GET['page'] = 1
-        chosen_page = request.GET['page']
 
-        for page in range(1, page_count):
-            for current_page in range(page_count):
-                if current_page == chosen_page:
-                    self.assertEqual(ellipsis_or_number(paginator, current_page, request), chosen_page)
-                    continue
-                if current_page in (chosen_page + 3, chosen_page - 3):
-                    self.assertEqual(ellipsis_or_number(paginator, current_page, request), '...')
-                    continue
+        self.assertEqual(ellipsis_or_number(paginator, 4, request), '...')
+        self.assertEqual(ellipsis_or_number(paginator, 2, request), 2)
+        self.assertEqual(ellipsis_or_number(paginator, 5, request), None)
 
-                if current_page in (chosen_page + 1, chosen_page + 2, chosen_page - 1,
-                                    chosen_page - 2, paginator.num_pages, paginator.num_pages - 1, 1, 2):
-                    self.assertEqual(ellipsis_or_number(paginator, current_page, request), current_page)
-                    continue
-            request.GET['page'] += 1
-            chosen_page = request.GET['page']
+        request.GET['page'] = 11
+
+        self.assertEqual(ellipsis_or_number(paginator, 11, request), 11)
+        self.assertEqual(ellipsis_or_number(paginator, 5, request), None)
+        self.assertEqual(ellipsis_or_number(paginator, 8, request), '...')
+
+        request.GET['page'] = 3
+
+        self.assertEqual(ellipsis_or_number(paginator, 1, request), 1)
+        self.assertEqual(ellipsis_or_number(paginator, 6, request), '...')
+        self.assertEqual(ellipsis_or_number(paginator, 7, request), None)
