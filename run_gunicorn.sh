@@ -24,4 +24,4 @@ exec gunicorn \
      --timeout=600 \
      --log-level=info \
      --bind unix:$SOCKFILE \
-     playlist.wsgi:application
+     project.wsgi:application

@@ -24,7 +24,7 @@ def deploy():
     with cd(BASE_PATH):
         run('git pull')
         put('project/production.py',
-            os.path.join(BASE_PATH, 'playlist/production.py'))
+            os.path.join(BASE_PATH, 'project/production.py'))
 
         # Update Nginx configuration
         put('nginx.conf', '/etc/nginx/sites-enabled/m3u8.conf')
