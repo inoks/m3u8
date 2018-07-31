@@ -1,0 +1,34 @@
+language: python
+
+python:
+  - "3.6"
+  - "3.7-dev"
+
+env:
+  - DJANGO="2.0.7"
+  - DJANGO="2.1b1"
+
+before_install:
+  - export DJANGO_SETTINGS_MODULE=project.settings
+  - export PYTHONPATH=$HOME/builds/inoks/m3u8
+  - export PIP_USE_MIRRORS=true
+
+install:
+  - pip install -r requirements.txt
+  - pip install flake8
+  - pip install django==$DJANGO --quiet
+  - pip install requests_mock==1.4.0
+  - pip install coverage
+  - pip install coveralls
+
+before_script:
+  - flake8 --ignore E501
+
+script:
+  - coverage run ./manage.py test
+  - coveralls
+
+matrix:
+    allow_failures:
+        - env: DJANGO="2.1b1"
+        - python: "3.7-dev"

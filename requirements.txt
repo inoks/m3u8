@@ -1,0 +1,10 @@
+django-webpack-loader==0.6.0
+Django==2.0.7
+djangorestframework==3.8.2
+drf-nested-routers==0.90.2
+Fabric3==1.14.post1
+gunicorn==19.9.0
+psycopg2-binary==2.7.5
+raven==6.9.0
+requests==2.19.1
+social-auth-app-django==2.1.0

@@ -1,0 +1,23 @@
+{% extends '_base.html' %}
+
+{% load staticfiles %}
+{% load i18n %}
+
+{% block content %}
+  <div class="jumbotron">
+    <h1 class="display-4">{% trans 'Video Playlist Editor' %}</h1>
+    <p class="lead">
+      {% trans "Here you can create or edit your m3u8 playlist and view channels online" %}
+    </p>
+    <img src="{% static 'app/images/editor.png' %}" class="img-fluid"/>
+    <hr class="my-4">
+    <p>
+      {% blocktrans %}You can also generate private link to your playlist for using with your video player or Smart TV.{% endblocktrans %}
+    </p>
+    <p class="lead">
+      <a class="btn btn-primary btn-lg" href="{% url 'create-playlist' %}" role="button">
+        {% trans 'Create Playlist' %}
+      </a>
+    </p>
+  </div>
+{% endblock %}

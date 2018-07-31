@@ -1,0 +1,4 @@
+#EXTM3U{% for channel in channels %}
+#EXTINF:{{ channel.extinf|safe }}{% if channel.group %}
+#EXTGRP:{{ channel.group }}{% endif %}
+{{ channel.path }}{% endfor %}

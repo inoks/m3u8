@@ -1,0 +1,22 @@
+{% extends '_base.html' %}
+
+{% load i18n %}
+
+{% block title %}{% trans "Login" %}{% endblock %}
+
+{% block content %}
+  {% if request.user.is_authenticated %}
+    <p>
+      {% trans "You already logged in, please logout first" %}<br/>
+      <a href="{% url 'logout' %}">{% trans "Logout" %}</a>
+    </p>
+  {% else %}
+    <p>
+      {% trans "Please login, using one of the following provider: " %}<br/>
+    </p>
+    <ul>
+      <li><a href="{% url "social:begin" "facebook" %}">{% trans 'Facebook' %}</a></li>
+      <li><a href="{% url "social:begin" "vk-oauth2" %}">{% trans 'VK' %}</a></li>
+    </ul>
+  {% endif %}
+{% endblock %}

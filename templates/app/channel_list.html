@@ -1,0 +1,31 @@
+{% extends '_base.html' %}
+
+{% load i18n %}
+
+{% block title %}Channels list{% endblock %}
+
+{% block content %}
+  <p>
+    {% trans "Public Playlist link" %}: <a href="{{ public_link }}" target="_blank">{{ public_link }}</a>
+  </p>
+  <form>
+    <input name="q" placeholder="Search channel by name" value="{{ request.GET.q }}">
+    <button>{% trans "Search" %}</button>
+  </form>
+  <hr/>
+  <a href="{% url 'new-channel' %}">{% trans "Add new channel to playlist" %}</a>
+  <hr/>
+  <a href="?order_by=title">{% trans "Order by title" %}</a>
+  <br/>
+
+  {% for channel in object_list %}
+    <li>
+      <a href="{{ channel.get_absolute_url }}">{{ channel.title }}</a>
+      (<a href="?group={{ channel.group }}">{{ channel.group }}</a>)
+      <a href="{{ channel.get_absolute_url }}">Edit/View</a>
+    </li>
+  {% endfor %}
+
+  {% include "app/paginator.html" %}
+
+{% endblock %}
