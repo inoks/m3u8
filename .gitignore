@@ -16,3 +16,6 @@ venv/
 media/uploads
 
 .coverage
+
+# Ignore local scripts
+_*.sh
