@@ -1,0 +1,9 @@
+[flake8]
+ignore =
+    W605,  # invalid escape sequence
+
+exclude =
+   */migrations/*,
+   ./frontend,
+
+max-line-length = 120

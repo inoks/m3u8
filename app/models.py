@@ -94,7 +94,8 @@ class Channel(models.Model):
 class SubmittedPlaylist(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    file = models.FileField(upload_to='playlists', null=True, blank=True, validators=[FileExtensionValidator(['m3u8', 'm3u'])])
+    file = models.FileField(upload_to='playlists', null=True, blank=True,
+                            validators=[FileExtensionValidator(['m3u8', 'm3u'])])
     url = models.URLField(null=True, blank=True)
     remove_existed = models.BooleanField(default=True)
 
