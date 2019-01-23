@@ -154,7 +154,7 @@ class AppTestCase(TestCase):
         channel_string = '#EXTINF:-1 ' \
                          'tvg-id="12" ' \
                          'tvg-name="Cinema Pro ARB" ' \
-                         'tvg-logo="http://m3u8.ru/logo.png" ' \
+                         'tvg-logo="http://m3u8.pzbz.ru/logo.png" ' \
                          'group-title="Arab Countries",Cinema Pro ARB'
         chf = M3U8ChannelFactory()
         chf.process_line(channel_string)
@@ -162,7 +162,7 @@ class AppTestCase(TestCase):
         self.assertEqual('Cinema Pro ARB', chf.title, )
         self.assertEqual('12', chf.extra_data['tvg-ID'])
         self.assertEqual('Cinema Pro ARB', chf.extra_data['tvg-name'])
-        self.assertEqual('http://m3u8.ru/logo.png', chf.extra_data['tvg-logo'])
+        self.assertEqual('http://m3u8.pzbz.ru/logo.png', chf.extra_data['tvg-logo'])
         self.assertEqual('Arab Countries', chf.extra_data['group-title'])
 
     def test_bad_extinf(self):

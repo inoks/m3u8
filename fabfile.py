@@ -4,7 +4,7 @@ import os
 from fabric.api import run, cd, env, prefix, put
 from fabric.context_managers import shell_env
 
-env.hosts = ['m3u8.ru', ]
+env.hosts = ['m3u8.pzbz.ru', ]
 env.user = 'root'
 
 BASE_PATH = '/var/django/playlist'

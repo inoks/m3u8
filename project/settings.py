@@ -26,7 +26,7 @@ SECRET_KEY = 'PUT_SECRET_KEY_HERE'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['m3u8.ru', ]
+ALLOWED_HOSTS = ['m3u8.pzbz.ru', ]
 
 # Application definition
 
@@ -131,8 +131,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-BASE_PATH = 'https://m3u8.ru'
-UNSECURE_BASE_PATH = 'http://m3u8.ru'
+BASE_PATH = 'https://m3u8.pzbz.ru'
+UNSECURE_BASE_PATH = 'http://m3u8.pzbz.ru'
 
 SOCIAL_AUTH_FACEBOOK_KEY = ''
 SOCIAL_AUTH_FACEBOOK_SECRET = ''
