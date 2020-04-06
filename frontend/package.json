@@ -7,7 +7,7 @@
   "private": false,
   "main": "index.js",
   "dependencies": {
-    "npm": "^6.4.1",
+    "npm": "^6.13.4",
     "react": "^16.6.3",
     "react-bootstrap": "^0.32.4",
     "react-cookie": "^2.2.0",
