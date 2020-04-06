@@ -1,5 +1,5 @@
 django-webpack-loader==0.6.0
-Django==2.1.5
+Django==2.2.10
 djangorestframework==3.9.1
 drf-nested-routers==0.91
 Fabric3==1.14.post1
